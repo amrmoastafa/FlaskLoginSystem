@@ -39,7 +39,7 @@ def register():
         users = cur.fetchone()
         if users is not None:
             flash('User already exists !','error')
-            return redirect(url_for("register"))
+            return redirect(url_for("login"))
         cur.execute("INSERT INTO users (name,email,password) VALUES (%s,%s,%s)",(name,email,hash_password,))
         mysql.connection.commit()
         session['name'] = name
@@ -144,26 +144,4 @@ def reset(token):
 
     except:
         return render_template("resetpw.html")
-    
-    print(ret)
-    if ret is not None:
-        print("Here2")
-        user_id = verify_reset_token(token)
-        password = request.form['password'].encode('utf-8')
-        hash_password = bcrypt.hashpw(password,bcrypt.gensalt())
-        cur = mysql.connection.cursor()
-        print("UPDATE users SET password=%s WHERE id=%i",(hash_password,user_id,))
-        # cur.executre("UPDATE users SET password=%s WHERE id=%i",(hash_password,user_id,))
-        
-        # users = cur.fetchone()
-        # if users is not None:
-        #     flash('User already exists !','error')
-        #     return redirect(url_for("register"))
-        # cur.execute("INSERT INTO users (name,email,password) VALUES (%s,%s,%s)",(name,email,hash_password,))
-        # mysql.connection.commit()
-        # session['name'] = name
-        # session['email'] = email
-        # session['password'] = request.form['password']
-        return redirect(url_for("home"))        
-        # return render_template("resetpw.html")
     
